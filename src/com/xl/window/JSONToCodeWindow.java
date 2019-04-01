@@ -17,17 +17,21 @@ import javax.swing.JTextField;
 
 import com.xl.util.JsonFormat;
 import com.xl.util.JsonToCode;
+import com.xl.util.ParameterToCode;
 
 public class JSONToCodeWindow extends JFrame{
 
 	JTextArea editArea;
 	JTextField textField;
 	JButton button;
+	JButton button2;
 	JScrollPane scrollPane;
 	TextWindow textWindow;
 	public JSONToCodeWindow(){
 		int screen_w,screen_h;
 		textWindow=  new TextWindow();
+		int array[]= new int[]{1,21};
+		System.out.println("数组"+array.toString());
 		
 		Toolkit toolkit= Toolkit.getDefaultToolkit();
 		screen_w= (int) toolkit.getScreenSize().getWidth();
@@ -47,16 +51,21 @@ public class JSONToCodeWindow extends JFrame{
 		 //scrollPane.add(editArea);
 		 
 		 button= new JButton("开始转换");
+		//设置对齐方式 不然会出问题
+		button.setAlignmentX((float) 0.5);
+		
+		button2= new JButton("参数转代码");
+		button2.setAlignmentX(0.5f);
 		 textField.setPreferredSize(new Dimension(640, 20));
 		 textField.setMaximumSize(new Dimension(640, 20));
 		 box_v.add(textField);
 		box_v.add(scrollPane);
 		box_v.add(button);
-		//设置对齐方式 不然会出问题
-		button.setAlignmentX((float) 0.5);
+		box_v.add(button2);
 		mainJPanel.add(box_v);
 		//设置最大宽高 用于适应布局
 		button.setMaximumSize(new Dimension(screen_w,20));
+		button2.setMaximumSize(new Dimension(screen_w, 20));
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -74,6 +83,18 @@ public class JSONToCodeWindow extends JFrame{
 				textWindow.setVisible(true);
 				
 				//editArea.setText(textString);
+			}
+		});
+		button2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String textString=editArea.getText().toString();
+				String jsonNameString= textField.getText();
+				
+				textWindow.setText(ParameterToCode.toCode(jsonNameString, textString));
+				textWindow.setVisible(true);
 			}
 		});
 		setSize(new Dimension(640, 480));
