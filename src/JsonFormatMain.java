@@ -9,7 +9,7 @@ public class JsonFormatMain {
 
 	
 	public static void main(String[] args) {
-		UIUtil.setWindowsStyle();
+		UIUtil.setWindowsStyle();//设置windows风格
 	JSONToCodeWindow	 window= new JSONToCodeWindow();
 		window.setVisible(true);
 	}
