@@ -36,6 +36,9 @@ public class JsonToCode {
 		if(value.startsWith("\"")){
 			return JSON_STRING;
 		}
+		else if(value.equals("null")){
+			return JSON_STRING;
+		}
 		else if(value.startsWith("[")){
 			return JSON_ARRAY;
 		}
@@ -159,11 +162,12 @@ case 1:
 		case 3://:
 			if(c==':'){
 				type=4;
+				start=i;
 				//name= textString.substring(start,i);
 			}
 			break;
 		case 4://,
-			if((c>='0' && c<='9')|| (c=='\"') ){
+			if((c>='0' && c<='9')|| (c=='\"') || (c>='a'&&c<='z') || (c>='A'&& c<='Z') ){
 				start= i;
 				type=5;
 			}
