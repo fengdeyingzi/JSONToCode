@@ -94,7 +94,7 @@ public class JSONToCodeWindow extends JFrame{
 				
 				textWindow.setText(jsonToCode.getCode());
 				textWindow.setVisible(true);
-				
+				textWindow.setState(JFrame.NORMAL);
 				//editArea.setText(textString);
 			}
 		});
@@ -107,6 +107,7 @@ public class JSONToCodeWindow extends JFrame{
 				String jsonNameString= textField.getText();
 				
 				textWindow.setText(ParameterToCode.toCode(jsonNameString, textString));
+				textWindow.setState(JFrame.NORMAL);
 				textWindow.setVisible(true);
 			}
 		});
