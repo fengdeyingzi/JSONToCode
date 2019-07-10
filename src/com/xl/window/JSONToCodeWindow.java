@@ -1,8 +1,10 @@
 package com.xl.window;
 
+
 import java.awt.Dimension;
 import java.awt.TextArea;
 import java.awt.Toolkit;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import com.xl.util.ClipBoard;
 import com.xl.util.JsonFormat;
 import com.xl.util.JsonToCode;
 import com.xl.util.ParameterToCode;
@@ -93,6 +96,7 @@ public class JSONToCodeWindow extends JFrame{
 				jsonToCode.setJson(textString);
 				
 				textWindow.setText(jsonToCode.getCode());
+				ClipBoard.setText(jsonToCode.getCode());
 				textWindow.setVisible(true);
 				textWindow.setState(JFrame.NORMAL);
 				//editArea.setText(textString);
@@ -107,6 +111,7 @@ public class JSONToCodeWindow extends JFrame{
 				String jsonNameString= textField.getText();
 				
 				textWindow.setText(ParameterToCode.toCode(jsonNameString, textString));
+				ClipBoard.setText(ParameterToCode.toCode(jsonNameString, textString));
 				textWindow.setState(JFrame.NORMAL);
 				textWindow.setVisible(true);
 			}
@@ -118,6 +123,7 @@ public class JSONToCodeWindow extends JFrame{
 				// TODO Auto-generated method stub
 				String jsonFormatText= JsonFormat.formatJson(editArea.getText());
 				editArea.setText(jsonFormatText);
+				ClipBoard.setText(jsonFormatText);
 			}
 		});
 		setSize(new Dimension(640, 480));
