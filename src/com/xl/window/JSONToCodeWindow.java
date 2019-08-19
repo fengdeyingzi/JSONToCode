@@ -21,6 +21,7 @@ import com.xl.util.ClipBoard;
 import com.xl.util.JsonFormat;
 import com.xl.util.JsonToCode;
 import com.xl.util.ParameterToCode;
+import com.xl.util.XmlToJson;
 
 public class JSONToCodeWindow extends JFrame{
 
@@ -29,6 +30,7 @@ public class JSONToCodeWindow extends JFrame{
 	JButton button;
 	JButton button2;
 	JButton button_format;
+	JButton button_xmlTojson;
 	JScrollPane scrollPane;
 	TextWindow textWindow;
 	public JSONToCodeWindow(){
@@ -61,6 +63,10 @@ public class JSONToCodeWindow extends JFrame{
 		
 		button2= new JButton("参数转代码");
 		button2.setAlignmentX(0.5f);
+		
+		button_xmlTojson = new JButton("xml转json");
+		button_xmlTojson.setAlignmentX(0.5f);
+		
 		button_format= new JButton("json格式化");
 		button_format.setAlignmentX(0.5f);
 		
@@ -74,6 +80,8 @@ public class JSONToCodeWindow extends JFrame{
 		box_h.add(button2);
 		box_h.add(Box.createRigidArea(new Dimension(10, 20)));
 		box_h.add(button_format);
+		box_h.add(Box.createRigidArea(new Dimension(10,20)));
+		box_h.add(button_xmlTojson);
 		box_v.add(box_h);
 		box_h.setPreferredSize(new Dimension(640, 30));
 		mainJPanel.add(box_v);
@@ -82,6 +90,7 @@ public class JSONToCodeWindow extends JFrame{
 		button.setMaximumSize(new Dimension(screen_w,60));
 		button2.setMaximumSize(new Dimension(screen_w, 60));
 		button_format.setMaximumSize(new Dimension(screen_w, 60));
+		button_xmlTojson.setMaximumSize(new Dimension(screen_w, 60));
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -124,6 +133,16 @@ public class JSONToCodeWindow extends JFrame{
 				String jsonFormatText= JsonFormat.formatJson(editArea.getText());
 				editArea.setText(jsonFormatText);
 				ClipBoard.setText(jsonFormatText);
+			}
+		});
+		button_xmlTojson.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String text = editArea.getText();
+				XmlToJson xmlToJson = new XmlToJson(text);
+				ClipBoard.setText(xmlToJson.check("UTF-8")); 
 			}
 		});
 		setSize(new Dimension(640, 480));
