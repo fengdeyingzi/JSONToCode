@@ -158,6 +158,49 @@ private String text;
   
   
   
+  //将文字进行处理 主要是处理转义字符
+  String toEscape(String text){
+	  StringBuffer buffer = new StringBuffer();
+	  int type = 0;
+	  for(int i=0;i<text.length();i++){
+		  char c = text.charAt(i);
+		  switch (type) {
+		case 0:
+			if(c=='\\'){
+			  type =1;
+		  }
+			else if(c=='\n'){
+				buffer.append("\\n");
+			}
+			else if(c=='\r'){
+				buffer.append("\\r");
+			}
+			else if(c=='\"'){
+				buffer.append("\\\"");
+			}
+			else{
+				buffer.append(c);
+			}
+			break;
+		case 1:
+			if(c=='\''){
+				buffer.append(c);
+			}
+			else{
+				buffer.append('\\');
+				buffer.append(c);
+			}
+			type = 0;
+			break;
+
+		default:
+			break;
+		}
+		  
+	  }
+	  
+	  return buffer.toString();
+  }
   
   
   
@@ -186,7 +229,7 @@ private String text;
       Attr attr = (Attr) namenm.item(k);  
       if(attr.getNodeName().equals("name"))
       {
-      list.add("\""+attr.getNodeValue()+"\":"+"\""+book.getTextContent()+"\"");
+      list.add("\""+attr.getNodeValue()+"\":"+"\""+toEscape( book.getTextContent())+"\"");
 //      System.out.println("添加"+attr.getNodeValue() + book.getTextContent() +attr.getFirstChild().getNodeValue()+"成功"+list.size());
       }
       else

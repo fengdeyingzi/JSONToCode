@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import com.xl.util.ClipBoard;
 import com.xl.util.JsonFormat;
 import com.xl.util.JsonToCode;
+import com.xl.util.ParamTojson;
 import com.xl.util.ParameterToCode;
 import com.xl.util.XmlToJson;
 
@@ -31,6 +32,7 @@ public class JSONToCodeWindow extends JFrame{
 	JButton button2;
 	JButton button_format;
 	JButton button_xmlTojson;
+	JButton button_paramToJson;
 	JScrollPane scrollPane;
 	TextWindow textWindow;
 	public JSONToCodeWindow(){
@@ -70,6 +72,9 @@ public class JSONToCodeWindow extends JFrame{
 		button_format= new JButton("json格式化");
 		button_format.setAlignmentX(0.5f);
 		
+		button_paramToJson = new JButton("参数转json");
+		button_paramToJson.setAlignmentX(0.5f);
+		
 		 textField.setPreferredSize(new Dimension(640, 20));
 		 textField.setMaximumSize(new Dimension(640, 20));
 		 box_v.add(textField);
@@ -83,6 +88,8 @@ public class JSONToCodeWindow extends JFrame{
 		box_h.add(Box.createRigidArea(new Dimension(10,20)));
 		box_h.add(button_xmlTojson);
 		box_v.add(box_h);
+		box_h.add(button_paramToJson);
+		
 		box_h.setPreferredSize(new Dimension(640, 30));
 		mainJPanel.add(box_v);
 		//设置最大宽高 用于适应布局
@@ -91,6 +98,7 @@ public class JSONToCodeWindow extends JFrame{
 		button2.setMaximumSize(new Dimension(screen_w, 60));
 		button_format.setMaximumSize(new Dimension(screen_w, 60));
 		button_xmlTojson.setMaximumSize(new Dimension(screen_w, 60));
+		button_paramToJson.setMaximumSize(new Dimension(screen_w,60));
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -143,6 +151,17 @@ public class JSONToCodeWindow extends JFrame{
 				String text = editArea.getText();
 				XmlToJson xmlToJson = new XmlToJson(text);
 				ClipBoard.setText(xmlToJson.check("UTF-8")); 
+			}
+		});
+		button_paramToJson.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String text = editArea.getText();
+				
+				editArea.setText(ParamTojson.toJson(text));
+				
 			}
 		});
 		setSize(new Dimension(640, 480));
