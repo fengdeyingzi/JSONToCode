@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import com.xl.util.ClipBoard;
 import com.xl.util.JsonFormat;
 import com.xl.util.JsonToCode;
+import com.xl.util.ParamToCode;
 import com.xl.util.ParamTojson;
 import com.xl.util.ParameterToCode;
 import com.xl.util.XmlToJson;
@@ -33,6 +34,7 @@ public class JSONToCodeWindow extends JFrame{
 	JButton button_format;
 	JButton button_xmlTojson;
 	JButton button_paramToJson;
+	JButton button_iToCode; //企查查接口转代码
 	JScrollPane scrollPane;
 	TextWindow textWindow;
 	public JSONToCodeWindow(){
@@ -75,6 +77,11 @@ public class JSONToCodeWindow extends JFrame{
 		button_paramToJson = new JButton("参数转json");
 		button_paramToJson.setAlignmentX(0.5f);
 		
+		button_iToCode = new JButton("接口转代码");
+		button_iToCode.setAlignmentX(0.5f);
+		
+		
+		
 		 textField.setPreferredSize(new Dimension(640, 20));
 		 textField.setMaximumSize(new Dimension(640, 20));
 		 box_v.add(textField);
@@ -89,6 +96,8 @@ public class JSONToCodeWindow extends JFrame{
 		box_h.add(button_xmlTojson);
 		box_v.add(box_h);
 		box_h.add(button_paramToJson);
+		
+		box_h.add(button_iToCode);
 		
 		box_h.setPreferredSize(new Dimension(640, 30));
 		mainJPanel.add(box_v);
@@ -162,6 +171,15 @@ public class JSONToCodeWindow extends JFrame{
 				
 				editArea.setText(ParamTojson.toJson(text));
 				
+			}
+		});
+		button_iToCode.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String text = editArea.getText();
+				String retext = ParamToCode.getCode(text);
+				editArea.setText(retext);
 			}
 		});
 		setSize(new Dimension(640, 480));
