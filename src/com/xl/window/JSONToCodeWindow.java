@@ -35,6 +35,7 @@ public class JSONToCodeWindow extends JFrame{
 	JButton button_xmlTojson;
 	JButton button_paramToJson;
 	JButton button_iToCode; //企查查接口转代码
+	JButton button_mdToCode;
 	JScrollPane scrollPane;
 	TextWindow textWindow;
 	public JSONToCodeWindow(){
@@ -79,6 +80,9 @@ public class JSONToCodeWindow extends JFrame{
 		
 		button_iToCode = new JButton("接口转代码");
 		button_iToCode.setAlignmentX(0.5f);
+		
+		button_mdToCode = new JButton("md转代码");
+		button_mdToCode.setAlignmentX(0.5f);
 		
 		
 		
@@ -180,6 +184,14 @@ public class JSONToCodeWindow extends JFrame{
 				String text = editArea.getText();
 				String retext = ParamToCode.getCode(text);
 				editArea.setText(retext);
+			}
+		});
+		button_mdToCode.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String text = editArea.getText();
+				
 			}
 		});
 		setSize(new Dimension(640, 480));
