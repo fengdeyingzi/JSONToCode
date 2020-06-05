@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import com.xl.util.ClipBoard;
 import com.xl.util.JsonFormat;
 import com.xl.util.JsonToCode;
+import com.xl.util.MarkDownToCode;
 import com.xl.util.ParamToCode;
 import com.xl.util.ParamTojson;
 import com.xl.util.ParameterToCode;
@@ -102,6 +103,7 @@ public class JSONToCodeWindow extends JFrame{
 		box_h.add(button_paramToJson);
 		
 		box_h.add(button_iToCode);
+		box_h.add(button_mdToCode);
 		
 		box_h.setPreferredSize(new Dimension(640, 30));
 		mainJPanel.add(box_v);
@@ -191,7 +193,8 @@ public class JSONToCodeWindow extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String text = editArea.getText();
-				
+				String retext = MarkDownToCode.toCode(text);
+				editArea.setText(retext);
 			}
 		});
 		setSize(new Dimension(640, 480));

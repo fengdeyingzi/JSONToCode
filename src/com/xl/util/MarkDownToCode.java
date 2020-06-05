@@ -1,5 +1,7 @@
 package com.xl.util;
 
+import com.xl.game.math.Str;
+
 public class MarkDownToCode {
 	
 	//转换成微信小程序
@@ -10,6 +12,7 @@ public class MarkDownToCode {
 	 * ##
 	 */
 	public static String toCode(String markdown){
+		System.out.println("接口转代码");
 		StringBuffer buffer = new StringBuffer();
 		int start = 0;
 		int line = 1;
@@ -17,7 +20,7 @@ public class MarkDownToCode {
 		String url = "";
 		String json = "";
 		int type = 0;
-		for(int i=0;i<markdown.length();i++){
+		for(int i=1;i<markdown.length();i++){
 			char c = markdown.charAt(i);
 			if(c == '\n'){
 				start = i+1;
@@ -26,22 +29,41 @@ public class MarkDownToCode {
 				case 0:
 					if(searchTextLine(markdown, i, "URl:")){
 						url = getLineTitle(markdown,i);
+						url = url.substring(4);
+						url = url.trim();
+						System.out.println("url");
 					}
-					if(searchTextLine(markdown, i, "##")){
-						title = getLineTitle(markdown, i);
-					}
+					
 					if(searchTextLine(markdown, i, "请求参数：")){
 						type=1;
+						System.out.println("参数");
 					}
 					break;
 				case 1:
-					
+					json = getJSONCode(markdown,i);
+					System.out.println("\n\nnetUtil.post(app.url+\""+url+"\",\n "+json+",\n"+"()=>{\n}\n(res)=>{\n},\n(error)=>{\n});");
+					buffer.append("\n\n  //"+title+" "+url+"\n  netUtil.post(app.url+\""+url+"\",\n"
+					+"  "+json+",\n"
+					+"  ()=>{\n    util.showLoading();\n}\n  (res)=>{\n    util.hideLoading();\n},\n  (error)=>{\n    util.hideLoading();\n});");
+					type = 0;
+					title = "";
 					break;
 				default:
 					break;
 				}
 				
 				
+			}
+			else{
+				if(searchTextLine(markdown, i, ".")){
+					if(title.length()==0){
+					title = getLineTitle(markdown, i);
+					System.out.println("title"+title);
+					}
+					else{
+						System.out.println("title ...");
+					}
+				}
 			}
 		}
 		
@@ -59,21 +81,26 @@ public class MarkDownToCode {
 	public static String getLine(String text,int index){
 		int start = index;
 		int end = 0;
-		for(int i=index;i>=0;i++){
+		System.out.println("sta = "+start);
+		for(int i=index;i>=0;i--){
 			char c = text.charAt(i);
 			if(c=='\n'){
 				start = i+1;
 				break;
 			}
+			if(i==1){
+				start = i;
+			}
 		}
-		
-		for(int i=index;i<text.length();i++){
+		System.out.println("start = "+start);
+		for(int i=start;i<text.length();i++){
 			char c = text.charAt(i);
 			if(c=='\n' || (text.length()-1==i)){
 				end = i;
 				break;
 			}
 		}
+		System.out.println("substring "+start+" "+end);
 		return text.substring(start,end);
 	}
 	//从当前位置开始读取json代码
@@ -81,31 +108,78 @@ public class MarkDownToCode {
 		int start = index;
 		int end = 0;
 		int leve = 0;
+		boolean isLine=false;
+		boolean isChar = false;
+		StringBuffer buffer = new StringBuffer();
 		for(int i=index;i>=0;i++){
+			
 			char c = text.charAt(i);
-			if(c=='\n' || c=='{'){
+			System.out.println(c);
+			if(c=='{'){
 				start = i+1;
 				leve = 1;
+				buffer.append(c);
+				buffer.append("\n");
 				break;
+				
 			}
 		}
+		
 		for(int i=start;i<text.length();i++){
 			char c = text.charAt(i);
+			
 			if(c=='{'){
 				leve++;
+				buffer.append("{");
 			}
-			if(c=='}'){
+			else if(c=='}'){
 				leve--;
+				buffer.append("}");
 			}
+			else if(c=='\"'){
+				if(!isChar)
+				isChar = true;
+				else
+					isChar = false;
+			}
+			else if(isChar && ((c>='a' && c<='z') || (c>='A' && c<='Z'))){
+				buffer.append(c);
+				isLine = false;
+			}
+			else if(c==':'){
+				buffer.append(c);
+//				buffer.append("\"\"");
+			}
+			else if(c=='\n' || c=='/' || Str.checkCh(""+c)){
+				if(!isLine){
+					buffer.append(",\n");
+					isLine = true;
+				}
+				else{
+					
+				}
+				
+				
+			}
+			System.out.println("c="+c+" leve="+leve);
 			if(leve==0){
 				end = i;
 				break;
 			}
-			if(c=='#'){
-				end = 1;break;
+			
+			
+			if(c=='#' || c=='*'){
+				if(leve>0){
+					for(int ii=0;ii<leve;ii++){
+						
+						buffer.append("    }");
+					}
+				}
+				end = i;break;
 			}
 		}
-		return text.substring(start,end);
+		System.out.println("getJson "+start+ " "+end);
+		return buffer.toString();
 	}
 	
 	//提取当前行的文字 并去除*
@@ -114,7 +188,7 @@ public class MarkDownToCode {
 		StringBuffer buffer = new StringBuffer();
 		for(int i=0;i<temp.length();i++){
 			char c = temp.charAt(i);
-			if(c != '*'){
+			if(c != '*' && c!='\\'){
 				buffer.append(c);
 			}
 			
