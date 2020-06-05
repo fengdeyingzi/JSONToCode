@@ -22,7 +22,8 @@ import java.io.StringBufferInputStream;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import org.xml.sax.SAXException;
-import java.util.ArrayList;   
+import java.util.ArrayList;
+import java.util.HashMap;   
 
 public class XmlToJson {   
 	public static String filename = "/mnt/sdcard/.aide/1.xml";
@@ -169,15 +170,6 @@ private String text;
 			if(c=='\\'){
 			  type =1;
 		  }
-			else if(c=='\n'){
-				buffer.append("\\n");
-			}
-			else if(c=='\r'){
-				buffer.append("\\r");
-			}
-			else if(c=='\"'){
-				buffer.append("\\\"");
-			}
 			else{
 				buffer.append(c);
 			}
@@ -203,7 +195,7 @@ private String text;
   }
   
   
-  
+  //返回键值对数据
   ArrayList<String> listNames(NodeList nodelist)
   {
  	 ArrayList<String> list = new ArrayList<String>();
@@ -245,6 +237,81 @@ private String text;
  	}
  	return list;
   }
+  
+  public HashMap<String, String> getHashList(String coding){
+		StringBuffer buf = new StringBuffer();
+		ArrayList<String> nameList1 = null;
+	
+	DocumentBuilderFactory domfac = DocumentBuilderFactory.newInstance();   
+
+	try 
+	{   
+
+	DocumentBuilder domBuilder = domfac.newDocumentBuilder();   
+
+//	InputStream strin = new FileInputStream(file1);
+
+	Document doc = domBuilder.parse(new ByteArrayInputStream(text.getBytes(coding)));   
+
+	Element root = doc.getDocumentElement(); 
+//	Element root2 = doc2.getDocumentElement();
+//	System.out.println("tagname "+root.getTagName());
+	NodeList books = root.getChildNodes(); 
+	return getHashList(books);
+	}
+	catch(Exception e){
+		System.err.println(e);
+	}
+	return null;
+  }
+  
+  
+  //返回一个哈希表数据
+  HashMap<String, String> getHashList(NodeList nodelist){
+	  HashMap<String, String> hashmap = new HashMap<>();
+//		 ArrayList<String> list = new ArrayList<String>();
+		  for (int i = 0; i < nodelist.getLength(); i++)
+		  { 
+		  Node book = nodelist.item(i);  
+		  
+		  // 节点是什么类型的节点  
+		  if (book.getNodeType() == Node.ELEMENT_NODE) 
+		 	 {
+		 	 // 判断是否是元素节点  
+		    Element element = (Element) book;  
+//		    System.out.println("——notename=" + element.getNodeName());
+		    //判断此元素节点是否有属性  
+		    if(element.hasAttributes())
+		      {  
+		      //获取属性节点的集合  
+		      NamedNodeMap namenm =   element.getAttributes();//Node  
+		      //遍历属性节点的集合  
+		      for(int k=0;k<namenm.getLength();k++)
+		 		 { 
+		      //获取具体的某个属性节点  
+		      Attr attr = (Attr) namenm.item(k);  
+		      if(attr.getNodeName().equals("name"))
+		      {
+		    	  hashmap.put(attr.getNodeValue(), toEscape( book.getTextContent()));
+//		      list.add("\""+attr.getNodeValue()+"\":"+"\""+toEscape( book.getTextContent())+"\"");
+		      }
+		      else
+		      {
+//		      list.add("未知:"+attr.getNodeName());
+		    	  System.out.println("未知："+attr.getNodeName());
+//		      System.out.println("name:"+attr.getNodeName()
+//		 										+" value:"  +attr.getNodeValue()
+//		 										+"  type:"+attr.getNodeType());
+		      }
+		 		 }
+		 		 }
+		 	}
+		 	}
+			return hashmap;
+  }
+  
+  
+  
   
  ArrayList<String> listString(NodeList nodelist)
  {
