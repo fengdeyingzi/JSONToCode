@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>json转代码</name>
+	<name>JsonCon</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,22 +15,3 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 </projectDescription>
-=======
-<?xml version="1.0" encoding="UTF-8"?>
-<projectDescription>
-	<name>Excel</name>
-	<comment></comment>
-	<projects>
-	</projects>
-	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-	</buildSpec>
-	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-	</natures>
-</projectDescription>
->>>>>>> ccc3e43f850e9ee9f24c164cdc4e45f0089c3ae0
