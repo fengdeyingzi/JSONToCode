@@ -18,8 +18,9 @@ public class ParamToCode {
 				head = param.split("：")[0];
 				i+=3;
 			}
-			else if(param.equals("String")){
+			else if(param.equals("String") || param.equals("Integer")){
 				buf.append("  text += \""+items[i+1]+"：\"+res."+head+"."+items[i-1]+";  "+"//"+items[i+1]+"\r\n");
+				buf.append("  text += \"\\n\";\n");
 			}
 			else if(param.equals("Object")){
 				buf.append(""+items[i-1]);

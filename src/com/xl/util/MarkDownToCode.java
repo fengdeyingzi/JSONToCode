@@ -44,7 +44,7 @@ public class MarkDownToCode {
 					System.out.println("\n\nnetUtil.post(app.url+\""+url+"\",\n "+json+",\n"+"()=>{\n}\n(res)=>{\n},\n(error)=>{\n});");
 					buffer.append("\n\n  //"+title+" "+url+"\n  netUtil.post(app.url+\""+url+"\",\n"
 					+"  "+json+",\n"
-					+"  ()=>{\n    util.showLoading();\n}\n  (res)=>{\n    util.hideLoading();\n},\n  (error)=>{\n    util.hideLoading();\n});");
+					+"  ()=>{\n    util.showLoading();\n},\n  (res)=>{\n    util.hideLoading();\n},\n  (error)=>{\n    util.hideLoading();\n});");
 					type = 0;
 					title = "";
 					break;
@@ -67,7 +67,10 @@ public class MarkDownToCode {
 			}
 		}
 		
-		return buffer.toString();
+		String retext = buffer.toString();
+		retext = retext.replace("Data:{,", "Data:{");
+		retext = retext.replace("Data: { ,", "Data:{");
+		return retext;
 	}
 	
 	
@@ -101,7 +104,10 @@ public class MarkDownToCode {
 			}
 		}
 		System.out.println("substring "+start+" "+end);
+		if(end!=0)
 		return text.substring(start,end);
+		else
+			return text.substring(start);
 	}
 	//从当前位置开始读取json代码
 	public static String getJSONCode(String text, int index){
@@ -127,7 +133,7 @@ public class MarkDownToCode {
 		
 		for(int i=start;i<text.length();i++){
 			char c = text.charAt(i);
-			
+			System.out.println("getJSONCode "+c);
 			if(c=='{'){
 				leve++;
 				buffer.append("{");
@@ -135,6 +141,12 @@ public class MarkDownToCode {
 			else if(c=='}'){
 				leve--;
 				buffer.append("}");
+			}
+			else if(c=='['){
+				buffer.append('[');
+			}
+			else if(c==']'){
+				buffer.append(']');
 			}
 			else if(c=='\"'){
 				if(!isChar)
@@ -146,11 +158,12 @@ public class MarkDownToCode {
 				buffer.append(c);
 				isLine = false;
 			}
-			else if(c==':'){
+			else if(c==':' || c==' '){
 				buffer.append(c);
 //				buffer.append("\"\"");
 			}
 			else if(c=='\n' || c=='/' || Str.checkCh(""+c)){
+				isChar = false;
 				if(!isLine){
 					buffer.append(",\n");
 					isLine = true;
@@ -160,6 +173,9 @@ public class MarkDownToCode {
 				}
 				
 				
+			}
+			else if(Str.checkCh(""+c)){
+				isChar = false;
 			}
 			System.out.println("c="+c+" leve="+leve);
 			if(leve==0){

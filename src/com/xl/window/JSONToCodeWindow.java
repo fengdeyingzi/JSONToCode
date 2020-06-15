@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -202,6 +203,7 @@ public class JSONToCodeWindow extends JFrame{
 		textWindow.setLocation((screen_w-640)/2, (screen_h-480)/2);
 		setTitle("json转代码v1.1 - 风的影子 - 2019.3.29");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("json.png")));
 		//setVisible(true);
 	}
 }
