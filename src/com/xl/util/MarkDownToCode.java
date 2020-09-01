@@ -154,7 +154,7 @@ public class MarkDownToCode {
 				else
 					isChar = false;
 			}
-			else if(isChar && ((c>='a' && c<='z') || (c>='A' && c<='Z'))){
+			else if(isChar && ((c>='a' && c<='z') || (c>='A' && c<='Z') || (c=='_'))){
 				buffer.append(c);
 				isLine = false;
 			}

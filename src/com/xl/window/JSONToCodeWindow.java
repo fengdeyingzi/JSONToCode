@@ -19,6 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.xl.util.ClipBoard;
+import com.xl.util.CodeUtil;
 import com.xl.util.JsonFormat;
 import com.xl.util.JsonToCode;
 import com.xl.util.MarkDownToCode;
@@ -38,6 +39,7 @@ public class JSONToCodeWindow extends JFrame{
 	JButton button_paramToJson;
 	JButton button_iToCode; //企查查接口转代码
 	JButton button_mdToCode;
+	JButton button_codestatistics;
 	JScrollPane scrollPane;
 	TextWindow textWindow;
 	public JSONToCodeWindow(){
@@ -86,6 +88,8 @@ public class JSONToCodeWindow extends JFrame{
 		button_mdToCode = new JButton("md转代码");
 		button_mdToCode.setAlignmentX(0.5f);
 		
+		button_codestatistics = new JButton("行数统计");
+		button_codestatistics.setAlignmentX(0.5f);
 		
 		
 		 textField.setPreferredSize(new Dimension(640, 20));
@@ -105,6 +109,7 @@ public class JSONToCodeWindow extends JFrame{
 		
 		box_h.add(button_iToCode);
 		box_h.add(button_mdToCode);
+		box_h.add(button_codestatistics);
 		
 		box_h.setPreferredSize(new Dimension(640, 30));
 		mainJPanel.add(box_v);
@@ -196,6 +201,16 @@ public class JSONToCodeWindow extends JFrame{
 				String text = editArea.getText();
 				String retext = MarkDownToCode.toCode(text);
 				editArea.setText(retext);
+			}
+		});
+		button_codestatistics.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String text = editArea.getText();
+				int line = CodeUtil.getLines(text);
+				editArea.setText("行数："+line);
+				Toast.makeText(JSONToCodeWindow.this, "行数："+line).show();
 			}
 		});
 		setSize(new Dimension(640, 480));

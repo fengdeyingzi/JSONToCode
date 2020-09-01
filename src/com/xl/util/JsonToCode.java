@@ -61,7 +61,12 @@ public class JsonToCode {
     public static void setSysClipboardText(String writeMe) {  
         Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();  
         Transferable tText = new StringSelection(writeMe);  
-        clip.setContents(tText, null);  
+        try{
+        	clip.setContents(tText, null);
+        }catch(Exception e){
+        	e.printStackTrace();
+        }
+        
     } 
 
 	//去除换行符
