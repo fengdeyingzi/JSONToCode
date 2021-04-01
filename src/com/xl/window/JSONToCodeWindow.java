@@ -18,6 +18,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.json.JSONObject;
+
 import com.xl.util.ClipBoard;
 import com.xl.util.CodeUtil;
 import com.xl.util.JsonFormat;
@@ -40,6 +42,8 @@ public class JSONToCodeWindow extends JFrame{
 	JButton button_iToCode; //企查查接口转代码
 	JButton button_mdToCode;
 	JButton button_codestatistics;
+	JButton button_toflutter;
+	JButton button_tojava;
 	JScrollPane scrollPane;
 	TextWindow textWindow;
 	public JSONToCodeWindow(){
@@ -91,27 +95,37 @@ public class JSONToCodeWindow extends JFrame{
 		button_codestatistics = new JButton("行数统计");
 		button_codestatistics.setAlignmentX(0.5f);
 		
+		button_toflutter = new JButton("转Flutter模型");
+		
+		button_tojava = new JButton("转java代码");
+		
 		
 		 textField.setPreferredSize(new Dimension(640, 20));
-		 textField.setMaximumSize(new Dimension(640, 20));
+		 textField.setMaximumSize(new Dimension(1920, 20));
 		 box_v.add(textField);
 		box_v.add(scrollPane);
 		Box box_h= Box.createHorizontalBox();
 		box_h.add(button);
-		box_h.add(Box.createRigidArea(new Dimension(10, 20)));
+//		box_h.add(Box.createRigidArea(new Dimension(10, 20)));
 		box_h.add(button2);
-		box_h.add(Box.createRigidArea(new Dimension(10, 20)));
+//		box_h.add(Box.createRigidArea(new Dimension(10, 20)));
 		box_h.add(button_format);
-		box_h.add(Box.createRigidArea(new Dimension(10,20)));
+//		box_h.add(Box.createRigidArea(new Dimension(10,20)));
 		box_h.add(button_xmlTojson);
-		box_v.add(box_h);
+		
 		box_h.add(button_paramToJson);
 		
 		box_h.add(button_iToCode);
 		box_h.add(button_mdToCode);
 		box_h.add(button_codestatistics);
+//		box_h.add(button_toflutter);
+		box_h.add(button_tojava);
 		
 		box_h.setPreferredSize(new Dimension(640, 30));
+//		JScrollPane scrollPane = new JScrollPane(box_h);
+		
+
+		box_v.add(box_h);
 		mainJPanel.add(box_v);
 		//设置最大宽高 用于适应布局
 		//button.setPreferredSize(new Dimension(400, 60));
@@ -120,6 +134,12 @@ public class JSONToCodeWindow extends JFrame{
 		button_format.setMaximumSize(new Dimension(screen_w, 60));
 		button_xmlTojson.setMaximumSize(new Dimension(screen_w, 60));
 		button_paramToJson.setMaximumSize(new Dimension(screen_w,60));
+		button_iToCode.setMaximumSize(new Dimension(screen_w,60));
+		button_mdToCode.setMaximumSize(new Dimension(screen_w,60));
+		button_codestatistics.setMaximumSize(new Dimension(screen_w,60));
+		button_tojava.setMaximumSize(new Dimension(screen_w,60));
+		
+		
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -132,9 +152,10 @@ public class JSONToCodeWindow extends JFrame{
 					jsonToCode.setJsonObjectName(jsonNameString);
 				}
 				jsonToCode.setJson(textString);
-				
-				textWindow.setText(jsonToCode.getCode());
-				ClipBoard.setText(jsonToCode.getCode());
+				StringBuffer buffer = new StringBuffer();
+				jsonToCode.getCode2(buffer,jsonNameString,new JSONObject(textString));
+				textWindow.setText(buffer.toString());
+				ClipBoard.setText(buffer.toString());
 				textWindow.setVisible(true);
 				textWindow.setState(JFrame.NORMAL);
 				//editArea.setText(textString);
@@ -213,10 +234,31 @@ public class JSONToCodeWindow extends JFrame{
 				Toast.makeText(JSONToCodeWindow.this, "行数："+line).show();
 			}
 		});
-		setSize(new Dimension(640, 480));
+		button_tojava.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String textString=editArea.getText().toString();
+				String jsonNameString= textField.getText();
+				
+				JsonToCode jsonToCode= new JsonToCode();
+				if(jsonNameString.length()!=0){
+					jsonToCode.setJsonObjectName(jsonNameString);
+				}
+				jsonToCode.setJson(textString);
+				
+				String temp = jsonToCode. getModelJavaString("  ",jsonNameString,new JSONObject(textString));
+				textWindow.setText(temp);
+//				ClipBoard.setText(buffer.toString());
+				textWindow.setVisible(true);
+				textWindow.setState(JFrame.NORMAL);
+				
+			}
+		});
+		setSize(new Dimension(820, 480));
 		setLocation((screen_w-640)/2, (screen_h-480)/2);
 		textWindow.setLocation((screen_w-640)/2, (screen_h-480)/2);
-		setTitle("json转代码v1.1 - 风的影子 - 2019.3.29");
+		setTitle("json转代码v1.1 - 风的影子 - 2021.4.1");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("json.png")));
 		//setVisible(true);
