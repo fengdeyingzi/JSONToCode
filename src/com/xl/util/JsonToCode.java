@@ -185,7 +185,7 @@ public class JsonToCode {
 		}
 		StringBuffer buffer = new StringBuffer();
 		if (object instanceof JSONObject) {
-			buffer.append(spaceString+"class " + getUpper(objectNameString) + " {\n");
+			buffer.append(spaceString+"public class " + getUpper(objectNameString) + " {\n");
 			JSONObject jsonObject = (JSONObject) object;
 			Set<String> keys = jsonObject.keySet();
 
@@ -193,20 +193,23 @@ public class JsonToCode {
 				System.out.println(key + "\n");
 				Object obj_item = jsonObject.get(key);
 				if (obj_item instanceof JSONArray) {
-					buffer.append(spaceString+"List<"+getUpper(key)+">"+" "+key+";\n");
+					buffer.append(spaceString+" public List<"+getUpper(key)+">"+" "+key+";\n");
 					buffer.append(getModelJavaString(spaceString+" ", key, (JSONArray) obj_item)) ;
 				} else if (obj_item instanceof JSONObject) {
 					buffer.append(spaceString+getUpper(key)+" "+key+";\n");
 					buffer.append(getModelJavaString(spaceString+" ", key, jsonObject.getJSONObject(key))) ;
 					
 				} else if (obj_item instanceof String) {
-					buffer.append(spaceString+"String " + key + ";\n");
+					buffer.append(spaceString+"public String " + key + ";\n");
 				} else if (obj_item instanceof Integer) {
-					buffer.append(spaceString+"int " + key + ";\n");
+					buffer.append(spaceString+"public int " + key + ";\n");
 				} else if (obj_item instanceof Long) {
-					buffer.append(spaceString+"long " + key + ";\n");
+					buffer.append(spaceString+"public long " + key + ";\n");
 				} else if (obj_item instanceof Double) {
-					buffer.append(spaceString+"double " + key + ";\n");
+					buffer.append(spaceString+"public double " + key + ";\n");
+				}
+				else if(obj_item instanceof Boolean){
+					buffer.append(spaceString+"public boolean " + key + ";\n");
 				}
 			}
 			buffer.append(spaceString+"  public "+getUpper(objectNameString)+" fromJson(JSONObject json){\n");
@@ -227,13 +230,15 @@ public class JsonToCode {
 					buffer.append(spaceString+"  "+key+" = "+"new "+getUpper(key)+"().fromJson(json.getJSONObject(\""+key+"\"));\n");
 					buffer.append(spaceString+"\n"+spaceString+"}\n");
 				} else if (obj_item instanceof String) {
-					buffer.append(spaceString+"  "+key+" = "+"json.getString(\""+key+"\");\n");
+					buffer.append(spaceString+"  "+key+" = "+"json.optString(\""+key+"\");\n");
 				} else if (obj_item instanceof Integer) {
-					buffer.append(spaceString+"  "+key+" = "+"json.getInt(\""+key+"\");\n");
+					buffer.append(spaceString+"  "+key+" = "+"json.optInt(\""+key+"\");\n");
 				} else if (obj_item instanceof Long) {
-					buffer.append(spaceString+"  "+key+" = "+"json.getLong(\""+key+"\");\n");
+					buffer.append(spaceString+"  "+key+" = "+"json.optLong(\""+key+"\");\n");
 				} else if (obj_item instanceof Double) {
-					buffer.append(spaceString+"  "+key+" = "+"json.getDouble(\""+key+"\");\n");
+					buffer.append(spaceString+"  "+key+" = "+"json.optDouble(\""+key+"\");\n");
+				} else if(obj_item instanceof Boolean){
+					buffer.append(spaceString+" "+key+" = "+"json.optBoolean(\""+key+"\");\n");
 				}
 				
 			}
